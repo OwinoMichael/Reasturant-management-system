@@ -46,11 +46,15 @@ Route::post("/addcart/{id}", [HomeController::class, "addcart"]);
 
 Route::get("/showcart/{id}", [HomeController::class, "showcart"]);
 
+Route::get("/remove/{id}", [HomeController::class, "remove"]);
+
 Route::get("/viewreservation", [AdminController::class, "viewreservation"]);
 
 Route::get("/viewchef", [AdminController::class, "viewchef"]);
 
 Route::post("/uploadfood", [AdminController::class, "uploadfood"]);
+
+Route::post("/orderconfirm", [HomeController::class, "orderconfirm"]);
 
 Route::get("/deleteusers/{id}", [AdminController::class, "deleteuser"]);
 

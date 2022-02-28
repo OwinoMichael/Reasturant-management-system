@@ -4,6 +4,8 @@
   <head>
     <base href="/public">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -144,23 +146,99 @@ https://templatemo.com/tm-558-klassy-cafe
                 <th style="padding: 30px">Food Name</th>
                 <th style="padding: 30px">Price</th>
                 <th style="padding: 30px">Quantity</th>
+                <th style="padding: 30px">Delete</th>
 
             </tr>
+
+            <form action="{{url('/orderconfirm')}}" method="post">
+
+            @csrf
 
             @foreach ($data as $data)
 
             <tr align="center">
-                <td>{{$data->title}}</td>
-                <td>{{$data->price}}</td>
-                <td>{{$data->quantity}}</td>
+
+                <td>
+                    <input type="text" name="foodname[]" value="{{$data->title}}" hidden>
+                    {{$data->title}}
+                </td>
+                <td>
+                    <input type="text" name="price[]" value="{{$data->price}}" hidden>
+                    {{$data->price}}
+                </td>
+                <td>
+                    <input type="text" name="quantity[]" value="{{$data->quantity}}" hidden>
+                    {{$data->quantity}}
+                </td>
+
             </tr>
 
+            @endforeach
+
+            @foreach ($data2 as $data2)
+
+            <tr style="position: relative; top: -60px; right: -230px">
+                <td>
+
+                    <td><a href="{{url('/remove', $data2->id)}}" class="btn btn-warning">Remove</a></td>
+
+                </td>
+
+            </tr>
             @endforeach
 
             <tr></tr>
         </table>
 
+        <div align="center" style="padding: 10px;">
+
+            <button class="btn btn-primary" type="button" id="order">Order Now</button>
+
+        </div>
+
+        <div id="appear" align="center" style="padding: 10px; display: none;">
+            <div style="padding: 10px">
+                <label for="">Name</label>
+                <input type="text" name="name" placeholder="Name">
+            </div>
+
+            <div style="padding: 10px">
+                <label for="">Phone</label>
+                <input type="number" name="phone" placeholder="Phone Number">
+            </div>
+
+            <div style="padding: 10px">
+                <label for="">Address</label>
+                <input type="text" name="address" placeholder="Address">
+            </div>
+
+            <div style="padding: 10px">
+                <input class="btn btn-success" type="submit" value="Order Confirm">
+                <button id="close" type="button" class="btn btn-danger">Cancel</button>
+            </div>
+        </div>
+
+        </form>
+
     </div>
+
+    <script type="text/javascript">
+
+    $("#order").click(
+        function(){
+
+            $("#appear").show();
+        }
+    );
+
+    $("#close").click(
+        function(){
+
+            $("#appear").hide();
+        }
+    );
+
+    </script>
 
 
       <!-- ***** Footer Start ***** -->
@@ -194,7 +272,12 @@ https://templatemo.com/tm-558-klassy-cafe
     </footer>
 
     <!-- jQuery -->
+
+
+
     <script src="assets/js/jquery-2.1.0.min.js"></script>
+
+
 
     <!-- Bootstrap -->
     <script src="assets/js/popper.js"></script>
