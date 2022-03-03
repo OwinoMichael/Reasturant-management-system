@@ -8,17 +8,29 @@ use App\Models\User;
 
 use App\Models\Food;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\Reservation;
 
 use App\Models\Foodchef;
+
+use App\Models\Order;
 
 class AdminController extends Controller
 {
     public function user(){
 
+        if (Auth::id()) {
+
         $data=user::all();
 
         return view("admin.user", compact("data"));
+
+        }
+
+        else{
+            return redirect('login');
+        }
     }
 
     public function deleteuser($id){
@@ -31,9 +43,15 @@ class AdminController extends Controller
 
     public function foodmenu(){
 
-        $data = food::all();
+        if (Auth::id()) {
+            $data = food::all();
 
-        return view("admin.foodmenu", compact("data"));
+            return view("admin.foodmenu", compact("data"));
+
+        } else {
+            return redirect('login');
+        }
+
     }
 
     public function uploadfood(Request $request){
@@ -65,8 +83,15 @@ class AdminController extends Controller
     }
 
     public function updateview($id){
-        $data=food::find($id);
-        return view("admin.updateview", compact('data'));
+
+        if (Auth::id()) {
+            $data = food::find($id);
+            return view("admin.updateview", compact('data'));
+
+        } else {
+            return redirect('login');
+        }
+
     }
 
     public function update($id, Request $request){
@@ -111,16 +136,29 @@ class AdminController extends Controller
 
     public function viewreservation () {
 
-        $data = reservation::all();
+        if (Auth::id()) {
 
-        return view("admin.adminreservation", compact('data'));
+            $data = reservation::all();
+
+            return view("admin.adminreservation", compact('data'));
+
+        } else {
+            return redirect('login');
+        }
+
     }
 
     public function viewchef () {
 
-        $data=foodchef::all();
+        if (Auth::id()) {
+            $data=foodchef::all();
 
-        return view("admin.adminchef", compact('data'));
+            return view("admin.adminchef", compact('data'));
+
+        } else {
+            return redirect('login');
+        }
+
     }
 
     public function uploadchef (Request $request) {
@@ -145,9 +183,16 @@ class AdminController extends Controller
     }
 
     public function updatechef ($id) {
-        $data = foodchef::find($id);
 
-        return view("admin.updatechef", compact('data'));
+        if (Auth::id()) {
+            $data = foodchef::find($id);
+
+            return view("admin.updatechef", compact('data'));
+
+        } else {
+            return redirect('login');
+        }
+
     }
 
     public function updatefoodchef (Request $request,$id) {
@@ -166,7 +211,7 @@ class AdminController extends Controller
             $data->image = $imagename;
         }
 
-        
+
 
         $data->name=$request->name;
 
@@ -184,5 +229,34 @@ class AdminController extends Controller
         $data->delete();
 
         return redirect()->back();
+    }
+
+    public function orders () {
+
+        if (Auth::id()) {
+            $data=order::all();
+
+            return view('admin.orders', compact('data'));
+
+        } else {
+            return redirect('login');
+        }
+
+    }
+
+    public function search ( Request $request)
+    {
+        if (Auth::id()) {
+            $search=$request->search;
+
+            $data = order::where('name', 'Like', '%'.$search.'%')->orWhere('foodname', 'Like', '%' . $search . '%')
+            ->get();
+
+            return view('admin.orders', compact('data'));
+
+        } else {
+            return redirect('login');
+        }
+
     }
 }
